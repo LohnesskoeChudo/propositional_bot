@@ -13,10 +13,10 @@ dp = Dispatcher(bot)
 
 
 def get_html(table):
-	width = table.index('\n') + 1
-	vw = 1.5 * round(100 / width,2)
+    width = table.index('\n') + 1
+    vw = 1.5 * round(100 / width,2)
 
-	template = '''<!DOCTYPE html>
+    template = '''<!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="utf-8">
@@ -27,9 +27,9 @@ def get_html(table):
   </body>
 </html>
 '''
-	html = template % table
-	binary = io.BytesIO(html.encode('utf-8'))
-	return types.input_file.InputFile(binary,filename="Result.html")
+    html = template % table
+    binary = io.BytesIO(html.encode('utf-8'))
+    return types.input_file.InputFile(binary,filename="Result.html")
 
 
 @dp.message_handler(commands=['start'])
@@ -59,25 +59,25 @@ Examples:
 
 @dp.message_handler()
 async def handle_formulas(message: types.Message):
-	formulas = message.text.split(sep=',')
-	try:
-		table = logexps.Table_maker(formulas)
-	except logexps.IncorrectFormulaException:
-		await message.answer('Wrong format. Type /syntax for help.')
-		return
-	except logexps.TooManyPropsException:
-		await message.answer('Too many different propositionals in particular formula.')
-		return
-	except logexps.TooManyFormulasException:
-		await message.answer('Too many formulas.')
-		return
-	except logexps.LengthException:
-		await message.answer('One of formulas has too much symbols.')
-		return
+    formulas = message.text.split(sep=',')
+    try:
+        table = logexps.Table_maker(formulas)
+    except logexps.IncorrectFormulaException:
+        await message.answer('Wrong format. Type /syntax for help.')
+        return
+    except logexps.TooManyPropsException:
+        await message.answer('Too many different propositionals in particular formula.')
+        return
+    except logexps.TooManyFormulasException:
+        await message.answer('Too many formulas.')
+        return
+    except logexps.LengthException:
+        await message.answer('One of formulas has too much symbols.')
+        return
 
-	str_table = table.get_table()
-	html = get_html(str_table)
-	await message.answer_document(html)
+    str_table = table.get_table()
+    html = get_html(str_table)
+    await message.answer_document(html)
 
 
 if __name__ == '__main__':
